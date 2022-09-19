@@ -1,6 +1,13 @@
 #!/bin/bash
 
-EXT=('*.mp4' '*.mkv' '*.avi')
+FORMATS=('*.mp4' '*.mkv' '*.avi') # Let's figure out what format video files are in this directory
+for ext in ${FORMATS[@]}; do
+    test=$(find . -maxdepth 1 -iname "$ext")
+    if [[ "$test" ]]; then
+        EXT+=("${ext}")
+    fi
+done
+
 SCALE="scale=640:-2"
 
 Help() {
@@ -21,7 +28,7 @@ SetTimestamp() {
 }
 
 MakeThumbnail() {
-    for file in "$PWD"/${EXT[@]}; do
+    for file in "$PWD"/"${EXT[@]}"; do
         if [[ "$TIMESTAMP" ]]; then
             TIME="-ss $TIMESTAMP"
             VF="-vf $SCALE"
@@ -29,7 +36,8 @@ MakeThumbnail() {
             TIME=""
             VF="-vf thumbnail,$SCALE"
         fi
-        ffmpeg -i "$file" $TIME $VF -frames:v 1 "${file%%.mp4}"-thumb.jpg
+        echo "Creating thumbnail for ${file##*/}"
+        ffmpeg -hide_banner -loglevel error -i "$file" $TIME $VF -frames:v 1 "${file%%.mp4}"-thumb.jpg
     done
 }
 
