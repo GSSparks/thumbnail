@@ -1,6 +1,6 @@
 #!/bin/bash
 
-FORMATS=('*.mp4' '*.mkv' '*.avi') # Let's figure out what video files are in this directory
+FORMATS=('*.mp4' '*.mkv' '*.avi') # Let's figure out what format video files are in this directory
 for ext in ${FORMATS[@]}; do
     test=$(find . -maxdepth 1 -iname "$ext")
     if [[ "$test" ]]; then
@@ -14,17 +14,17 @@ Help() {
     echo
     echo "Create thumbnails for every video in afolder"
     echo
-    echo "thumbnail [-h|t]"
+    echo "thumbnail [-h|t] [-f Filename]"
     echo "options:"
-    echo "h     Show this help."
-    echo "t     Create thumbnail at a specific Timestamp. (ex. 00:00:05)"
+    echo "-h             Show this help."
+    echo "-t             Create thumbnail at a specific Timestamp. (ex. 00:00:05)"
+    echo "-f             Filename to make a thumbnail for a single video."
     echo
 }
 
 SetTimestamp() {
     echo -n "Make thumbnail at what timestamp? (ex. 00:00:05) "
     read TIMESTAMP
-    MakeThumbnail
 }
 
 MakeThumbnail() {
@@ -36,18 +36,37 @@ MakeThumbnail() {
             TIME=""
             VF="-vf thumbnail,$SCALE"
         fi
+
+        if [[ "$FILENAME" ]]; then
+            file="$FILENAME"
+            broked='True'
+        else
+            file="$file"
+        fi
+
         echo "Creating thumbnail for ${file##*/}"
         ffmpeg -hide_banner -loglevel error -i "$file" $TIME $VF -frames:v 1 "${file%%.mp4}"-thumb.jpg
+        if [[ "$broked" ]]; then
+            break
+        else
+            continue
+        fi
     done
 }
 
-while getopts ":h:t" option; do
+while getopts ":htf:" option; do
     case $option in
-        h)  Help
+        h)
+            Help
             exit;;
-        t)  SetTimestamp
-            exit;;
-        \?) echo "Not an Option"
+        t)
+            SetTimestamp
+            ;;
+        f)
+            FILENAME="$OPTARG"
+            ;;
+        ?)
+            Help
             exit;;
     esac
 done
