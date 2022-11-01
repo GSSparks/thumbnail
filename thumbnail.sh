@@ -1,6 +1,6 @@
 #!/bin/bash
 
-FORMATS=('*.mp4' '*.mkv' '*.avi') # Let's figure out what format video files are in this directory
+FORMATS=('*.mp4' '*.mkv' '*.avi' '*.m4v') # Let's figure out what format video files are in this directory
 for ext in ${FORMATS[@]}; do
     test=$(find . -maxdepth 1 -iname "$ext")
     if [[ "$test" ]]; then
