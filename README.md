@@ -4,3 +4,12 @@ This is a simple Bash script that will loop through every video file in the dire
 I created this small script to make thumbnails for videos that I host on my Jellyfin server. 
 
 The default action of this script is to create a random thumbnail. If you pass the -t flag it'll allow you to set a timestamp. If you pass the -f flag along with the name of a file, it'll create a thumbnail for just that file.
+```
+Create thumbnails for every video in a folder
+
+thumbnail [-h|t] [-f Filename]
+options:
+ -h            Show this help.
+ -t            Create thumbnail at a specific Timestamp. (ex. 00:00:05)
+ -f            Filename to make a thumbnail for a single video.
+```
