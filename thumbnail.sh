@@ -40,16 +40,12 @@ MakeThumbnail() {
         if [[ "$FILENAME" ]]; then
             file="$FILENAME"
             broked='True'
-        else
-            file="$file"
         fi
 
         echo "Creating thumbnail for ${file##*/}"
         ffmpeg -hide_banner -loglevel error -i "$file" $TIME $VF -frames:v 1 "${file%%.mp4}"-thumb.jpg
         if [[ "$broked" ]]; then
             break
-        else
-            continue
         fi
     done
 }
