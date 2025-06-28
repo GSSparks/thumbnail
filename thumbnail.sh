@@ -20,6 +20,7 @@ Help() {
     echo "-t             Create thumbnail at a specific Timestamp. (ex. 00:00:05)"
     echo "-f             Filename to make a thumbnail for a single video."
     echo
+    echo
 }
 
 SetTimestamp() {
